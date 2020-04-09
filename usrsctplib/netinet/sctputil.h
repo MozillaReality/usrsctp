@@ -34,7 +34,7 @@
 
 #ifdef __FreeBSD__
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: head/sys/netinet/sctputil.h 347975 2019-05-19 17:28:00Z tuexen $");
+__FBSDID("$FreeBSD: head/sys/netinet/sctputil.h 359405 2020-03-28 20:25:45Z tuexen $");
 #endif
 
 #ifndef _NETINET_SCTP_UTIL_H_
@@ -144,7 +144,7 @@ uint32_t sctp_get_next_mtu(uint32_t);
 void
 sctp_timeout_handler(void *);
 
-uint32_t
+int
 sctp_calculate_rto(struct sctp_tcb *, struct sctp_association *,
     struct sctp_nets *, struct timeval *, int);
 
@@ -175,6 +175,9 @@ sctp_pull_off_control_to_new_inp(struct sctp_inpcb *old_inp,
 
 
 void sctp_stop_timers_for_shutdown(struct sctp_tcb *);
+
+/* Stop all timers for association and remote addresses. */
+void sctp_stop_association_timers(struct sctp_tcb *, bool);
 
 void sctp_report_all_outbound(struct sctp_tcb *, uint16_t, int, int
 #if !defined(__APPLE__) && !defined(SCTP_SO_LOCK_TESTING)
@@ -427,5 +430,10 @@ uint32_t sctp_hc_get_mtu(union sctp_sockstore *, uint16_t);
 #endif
 void sctp_set_state(struct sctp_tcb *, int);
 void sctp_add_substate(struct sctp_tcb *, int);
+uint32_t sctp_ticks_to_msecs(uint32_t);
+uint32_t sctp_msecs_to_ticks(uint32_t);
+uint32_t sctp_ticks_to_secs(uint32_t);
+uint32_t sctp_secs_to_ticks(uint32_t);
+
 #endif				/* _KERNEL */
 #endif
